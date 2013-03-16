@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->
+	</head>
+    <body>
+      <form action="/admin/email" method="post">
+		<div align="center" style="font-size:25px">Admin Email Page</div>
+		<br><br>		
+		<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="subject" rows="1" cols="60" placeholder="Subject" value="{{ email_subject }}"/></div>
+		<div align="center"><textarea style="-webkit-border-radius: 5px; font-size:25px" name="body" rows="10" cols="16" placeholder="Email body" >{{  email_body }}</textarea></div>	
+		<br>
+		<!--
+		<table align="center" border="0" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th><input type="checkbox" name="regulars"> Regulars</input></th>
+				<th><input type="checkbox" name="subs"> Subs</input></th>
+			</tr>		
+		</table>
+		<br>
+		-->
+		<div align="center"><input type="checkbox" style="font-size:25px" name="allRegulars"> Regulars</input>
+			<input type="checkbox" name="allSubs"> Subs</input></div>
+		<br>
+		<div align="center"><button type="submit" style="background-color:#0a0; color:#fff; -webkit-border-radius: 5px; font-size:25px; height:75px; width:265px">Send</button></div>
+		<br>
+		{% if message %}
+			<div align="center" style="font-size:25px; color:#f00">*** {{ message }} ***</div>
+		{% endif %}		
+      </form>
+    </body>
+  </html>

@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->		
+	</head>
+    <body>
+		<div align="center" style="font-size:25px">2013 Esri Hockey Games Remaining</div>
+		<br>
+		<table>
+			<td>
+		{% for game in games %}
+		<tr>
+			<table style:"margin:auto;">
+				<td><tr>
+			<div align="center" style="font-size:25px">{{ game.date.month }}/{{ game.date.day }}/{{ game.date.year }} {{ game.time }}</div>
+				</tr></td>
+			</table>
+		</tr>
+		{% endfor %}
+		</td>
+		</table>
+    </body>
+  </html>

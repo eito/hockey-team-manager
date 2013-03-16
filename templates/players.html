@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->		
+	</head>
+    <body>
+		<div align="center" style="font-size:25px">Esri Hockey Players</div>
+		<br>
+		<table>
+			<td>
+		{% for player in players %}
+		<tr>
+			<table style:"margin:auto;">
+				<td><tr>
+			<div align="center" style="font-size:25px">
+				<a href="/player/{{ player.key.id }}">{{ player.fname }} {{ player.lname }}</a>
+				</div>
+				</tr></td>
+			</table>
+		</tr>
+		{% endfor %}
+		</td>
+		</table>
+    </body>
+  </html>

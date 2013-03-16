@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->		
+	</head>
+    <body>
+		<div align="center">
+		{% include "dropdown.html" %} 
+		<br>
+		</div>
+		<br>
+		{% if comments %}
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="1"><br><h3>This week's notes</h3></th>
+			</tr>
+			{% for comment in comments %}
+				<TR>
+					<td><b>{{ comment.name }}</b> - {{ comment.text }}</a></td>
+			   </TR>
+			{% endfor %}
+		</table>
+		<br>
+		{% endif %}
+		{% if game %}
+		<div align="center" style="font-size:25px">Next Game: {{ game.date.month }}/{{ game.date.day }}/{{ game.date.year }}</div>
+		<br>
+		<div align="center" style="font-size:25px">Players: {{ numSkaters }} Goalies: {{ numGoalies }}</div>
+		<br>
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="2"><br><h3>In</h3></th>
+			</tr>
+			<tr>
+				<th>Skaters</th>
+				<th>Goalies</th>
+			</tr>
+			{% for item in inPlayerMap %}
+				<TR ALIGN="CENTER">
+					{% if item.0 %}
+						<td><a href="/player/{{ item.0.key.id }}">{{ item.0.fname }} {{ item.0.lname }}</a></td>
+					{% else %}	
+						<td></td>
+					{% endif %}
+					{% if item.1 %}
+						<td><a href="/player/{{ item.1.key.id }}">{{ item.1.fname }} {{ item.1.lname }}</a></td>
+					{% endif %}
+			   </TR>
+			{% endfor %}
+		</table>
+		<br>
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="1"><br><h3>Out</h3></th>
+			</tr>
+			<tr>
+				<th>Players</th>
+			</tr>
+			{% for item in outPlayers %}
+				<TR ALIGN="CENTER">
+					<td><a href="/player/{{ item.key.id }}">{{ item.fname }} {{ item.lname }}</a></td>
+			   </TR>
+			{% endfor %}
+		</table>
+		{% else %}
+		<div align="center" style="font-size:25px">There are no more scheduled games</div>
+		{% endif %}
+    </body>
+  </html>

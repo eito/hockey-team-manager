@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->
+	</head>
+    <body>
+      <form action="/edit" method="post">
+		<div align="center" style="font-size:25px">Esri Hockey Players</div>
+		<br>
+		{% for player in players %}
+			<div align="center" style="font-size:25px; color:#f00">{{ player.fname }} {{ player.lname }}</div>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="fname{{ player.key.id }}" rows="1" cols="60" placeholder="First Name" value="{{ player.fname }}" /></div>						
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="lname{{ player.key.id }}" rows="1" cols="60" placeholder="Last Name" value="{{ player.lname }}" /></div>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="email{{ player.key.id }}" rows="1" cols="60" placeholder="Email Address" value="{{ player.email }}" type="email"></div>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="phone{{ player.key.id }}" rows="1" cols="60" placeholder="Phone" {% if player.phone %} value="{{ player.phone }}" {% endif %} type="tel"></div>
+			<div align="center"><input hidden="true" name="id" value="{{ player.key.id }}"></div>
+			<br>
+		{% endfor %}
+	
+		<div align="center"><button id="save" type="submit" style="background-color:#0a0; color:#fff; -webkit-border-radius: 5px; font-size:25px; height:75px; width:265px">Save</button></div>
+      </form>
+    </body>
+  </html>

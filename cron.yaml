@@ -1,0 +1,9 @@
+cron:
+- description: weekly Monday email
+  url: /mail/weekly
+  schedule: every monday 08:00
+  timezone: America/Los_Angeles
+- description: daily check to see if we need to update game list
+  url: /tasks/updateGames
+  schedule: every friday 01:00
+  timezone: America/Los_Angeles

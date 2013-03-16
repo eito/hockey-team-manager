@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->		
+	</head>
+    <body>
+		{% if game %}
+		<div align="center" style="font-size:25px">Current Rosters for {{ game.date.month }}/{{ game.date.day }}/{{ game.date.year }}</div>
+		<br>
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="2" height="20"><br><h3>Blue</h3></th>
+			</tr>
+			<tr>
+				<th>Players</th>
+				<th>Goalies</th>
+			</tr>
+			{% for item in bluePlayerMap %}
+				<TR ALIGN="CENTER">
+					{% if item.0 %}
+						<td><a href="/player/{{ item.0.key.id }}">{{ item.0.fname }} {{ item.0.lname }}</a></td>
+					{% endif %}
+					{% if item.1 %}
+						<td><a href="/player/{{ item.1.key.id }}">{{ item.1.fname }} {{ item.1.lname }}</a></td>
+					{% endif %}
+			   </TR>
+			{% endfor %}
+		</table>
+		<br>
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="2"><br><h3>White</h3></th>
+			</tr>
+			<tr>
+				<th>Players</th>
+				<th>Goalies</th>
+			</tr>
+			{% for item in whitePlayerMap %}
+				<TR ALIGN="CENTER">
+					{% if item.0 %}
+						<td><a href="/player/{{ item.0.key.id }}">{{ item.0.fname }} {{ item.0.lname }}</a></td>
+					{% endif %}
+					{% if item.1 %}
+						<td><a href="/player/{{ item.1.key.id }}">{{ item.1.fname }} {{ item.1.lname }}</a></td>
+					{% endif %}
+			   </TR>
+			{% endfor %}
+		</table>
+		
+		{% else %}
+		<div align="center" style="font-size:25px">There are no more scheduled games</div>
+		{% endif %}
+    </body>
+  </html>

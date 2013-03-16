@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->		
+	</head>
+    <body>
+		<div align="center">
+		{% include "dropdown.html" %}
+		<br>
+		</div>
+		<br>
+		<br>
+		{% if subs %}
+		<table align="center" border="2" width="265px" cellpadding="4" cellspacing="3">
+			<tr>
+				<th colspan="1"><br><h3>Subs</h3></th>
+			</tr>
+			{% for sub in subs %}
+				<TR ALIGN="CENTER">
+					<td><a href="/player/{{ sub.key.id }}">{{ sub.fname }} {{ sub.lname }}</a></td>
+			   </TR>
+			{% endfor %}
+		</table>
+		{% else %}
+		<div align="center" style="font-size:25px">There are no subs.</div>
+		{% endif %}
+    </body>
+  </html>

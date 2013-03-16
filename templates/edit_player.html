@@ -1,0 +1,89 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=2.0; user-scalable=1;" />
+		<!-- ><meta name="apple-mobile-web-app-capable" content="yes" />	<-->	
+	</head>
+    <body>
+      <form action="/player/{{ player.key.id }}" method="post">
+		<div align="center" style="font-size:25px">Edit your name and email, then click Save.</div>
+		<br>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="fname{{ player.key.id }}" rows="1" cols="60" placeholder="First Name" value="{{ player.fname }}" /></div>						
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="lname{{ player.key.id }}" rows="1" cols="60" placeholder="Last Name" value="{{ player.lname }}" /></div>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="email{{ player.key.id }}" rows="1" cols="60" placeholder="Email Address" value="{{ player.email }}" type="email"></div>
+			<div align="center"><input style="-webkit-border-radius: 5px; font-size:25px" name="phone{{ player.key.id }}" rows="1" cols="60" placeholder="Phone" {% if player.phone %} value="{{ player.phone }}" {% endif %} type="tel"></div>
+			
+			<div align="center"><input hidden="true"name="rating{{ player.key.id }}" rows="1" cols="60" placeholder="Rating" value="{{ player.rating }}"></div>
+			<div align="center"><input hidden="true" name="id" value="{{ player.key.id }}"></div>
+			<br>
+			<div align="center" style="font-size:20px">
+			<input type = "radio"
+			                 name = "inOrOut"
+			                 id = "in"
+			                 value = "in"
+							{% if player.inThisWeek %}
+			                 checked = "checked" 
+							{% endif %}
+			/>
+	        <label for = "in">In</label>
+
+	         <input type = "radio"
+	                 name = "inOrOut"
+	                 id = "out"
+	                 value = "out" 
+					{% if not player.inThisWeek %}
+	                 checked = "checked" 
+					{% endif %}
+			/>
+	         <label for = "out">Out</label>
+			</div>
+			<br>
+			<div align="center" style="font-size:20px">
+			<input type = "radio"
+			                 name = "playerType"
+			                 id = "player"
+			                 value = "player"
+							{% if not player.goalie %}
+			                 checked = "checked" 
+							{% endif %}
+			/>
+	        <label for = "player">Player</label>
+
+	         <input type = "radio"
+	                 name = "playerType"
+	                 id = "goalie"
+	                 value = "goalie" 
+					{% if player.goalie %}
+	                 checked = "checked" 
+					{% endif %}
+			/>
+	         <label for = "goalie">Goalie</label>
+			</div>
+			<br>
+			<div align="center" style="font-size:20px">
+			<input type = "radio"
+			                 name = "regularOrSub"
+			                 id = "regular"
+			                 value = "regular"
+							{% if not player.sub %}
+			                 checked = "checked" 
+							{% endif %}
+			/>
+	        <label for = "regular">Regular</label>
+
+	         <input type = "radio"
+	                 name = "regularOrSub"
+	                 id = "sub"
+	                 value = "sub" 
+					{% if player.sub %}
+	                 checked = "checked" 
+					{% endif %}
+			/>
+	         <label for = "sub">Sub</label>
+			</div>
+			<br>
+		<div align="center"><button value="save" name="save" id="save" type="submit" style="background-color:#0a0; color:#fff; -webkit-border-radius: 5px; font-size:25px; height:75px; width:265px">Save</button></div>
+		<br>
+		<div align="center"><button value="delete" name="delete" id="delete" type="submit" style="background-color:#f00; color:#fff; -webkit-border-radius: 5px; font-size:25px; height:75px; width:265px">Delete</button></div>
+      </form>
+    </body>
+  </html>
