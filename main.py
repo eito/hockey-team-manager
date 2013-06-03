@@ -30,6 +30,7 @@ from models import Comment
 from pst import Pacific_tzinfo
 from common import *
 
+# just lists all of the "subs" that are registered
 class SubsHandler(webapp2.RequestHandler):
 	def get(self):
 		subs = GetAllSubs()
@@ -38,14 +39,14 @@ class SubsHandler(webapp2.RequestHandler):
 			values = {'subs':subs}
 		path = os.path.join(os.path.dirname(__file__), 'templates/subs.html')
 		self.response.out.write(template.render(path, values))
-		
+
+# main page, shows current week's game and players
+# who are in...also shows any notes for that current week
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-		#results = db.GqlQuery('SELECT * FROM GameDate ORDER BY date ASC')
-		#game = results.fetch(1)[0]
 		game = GetNextGame()
-		# we need to pass in a game, goalies array, players array
-		#results = Player.all()
+		# get all of the players and loop through them to figure out
+        # who is "in"
 		results = GetAllPlayers()
 		inGoalies = []
 		inPlayers = []
@@ -59,18 +60,26 @@ class MainHandler(webapp2.RequestHandler):
 			else:
 				outPlayers.append(player)
 		inPlayerMap = map(None, inPlayers, inGoalies)
+        
+        # we query all of the comments and order them by time
 		comments = Comment.all()
 		comments.order("-time")
+        
+        # the template system takes key/value pairs 
 		values = {"game" : game, "inPlayerMap":inPlayerMap, "outPlayers":outPlayers, "comments":comments, "numGoalies": len(inGoalies), "numSkaters":len(inPlayers)}
+        
+        # this is standard webapp/django template syntax
+        # we specify a template to use and a dictionary of values
 		path = os.path.join(os.path.dirname(__file__), 'templates/main.html')
 		self.response.out.write(template.render(path, values))
-		
+
+# This handles the /rosters endpoint and displays the rosters
+# for the current week (empty if they have not been set yet)
 class RosterHandler(webapp2.RequestHandler):
     def get(self):
 		game = GetNextGame()
 		blue = {}
 		white = {}
-		#results = db.GqlQuery('SELECT * FROM Player ORDER BY lname DESC').fetch(100)
 		results = GetAllPlayers()
 		blueSkaters = []
 		blueGoalies = []
@@ -95,50 +104,60 @@ class RosterHandler(webapp2.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__), 'templates/rosters.html')
 		self.response.out.write(template.render(path, values))
 
+# lists all of the registered players
 class PlayersHandler(webapp2.RequestHandler):
 	def get(self):
 		players = GetAllPlayers()
 		values = { "players" : players}
 		path = os.path.join(os.path.dirname(__file__), 'templates/players.html')
 		self.response.out.write(template.render(path, values))
-		
+
+# for given inputs, creates/renders a signup/edit page	
 def RenderSignupPage(fname, lname, email, message, phone):
 	values = { "fname": fname, "lname": lname, "email":email, "message":message, "phone":phone}
 	path = os.path.join(os.path.dirname(__file__), 'templates/signup.html')
 	return template.render(path, values)
-	
+
+# handles the signup endpoint for new players
 class SignupHandler(webapp2.RequestHandler):
+    # for a GET, a user is bringing this page up in the browser
+    # show an empty page
 	def get(self):
 		self.response.out.write(RenderSignupPage("", "", "", "", ""))
 
+    # for a POST, this means the user has clicked "submit" on the page
+    # and is either signing up as new, or editing their existing info
 	def post(self):
 		first_name = self.request.get("fname")
 		last_name = self.request.get("lname")		
 		email_address = self.request.get("email")
 		phone_number = self.request.get("phone")
+        # we don't require a phone number, but we don't 
+        # want it to be an empty string either
 		if phone_number == "":
 			phone_number = None
+        # make sure they fill out all required fields
 		if first_name == "" or last_name == "" or email_address == "":
 			self.response.out.write(RenderSignupPage(first_name, last_name, email_address,"Fill in all the fields", phone_number))
 		else:
+            # if a new player has been created, clear our memcache and add the new player
 			memcache.delete('players')
 			player = Player(fname=first_name, lname=last_name, email=email_address, goalie=False, rating=0, phone=phone_number)
 			player.put()
 			values = { "message":"Thank you for signing up!"}
 			path = os.path.join(os.path.dirname(__file__), 'templates/success.html')
 			self.response.out.write(template.render(path, values))
-		
-class ScheduleHandler(webapp2.RequestHandler):
-	def get(self):
-		self.response.write('This is where the schedule would be.')
 
+# This allows an admin to edit ALL players inline
 class PlayerEditHandler(webapp2.RequestHandler):
+    # the GET happens when the admin browses to an explicit link /edit
 	def get(self):
 		players = GetAllPlayers()
 		values = { "players" : players}
 		path = os.path.join(os.path.dirname(__file__), 'templates/edit_players.html')
 		self.response.out.write(template.render(path, values))
 	
+    # the POST happens when the admin submits the form
 	def post(self):
 		players = GetAllPlayers()
 		if players:
@@ -156,7 +175,9 @@ class PlayerEditHandler(webapp2.RequestHandler):
 		path = os.path.join(os.path.dirname(__file__), 'templates/success.html')
 		self.response.out.write(template.render(path, values))	
 
+# page for single player
 class PlayerHandler(webapp2.RequestHandler):
+    # display info for single player
 	def get(self, playerId):		
 		player = Player.get_by_id(int(playerId))
 		if player:
@@ -167,6 +188,7 @@ class PlayerHandler(webapp2.RequestHandler):
 			path = os.path.join(os.path.dirname(__file__), 'templates/success.html')
 		self.response.out.write(template.render(path, values))
 	
+    # single player info has been submitted
 	def post(self, playerId):
 		deleteClicked = self.request.get("delete")
 		player = Player.get_by_id(int(playerId))
@@ -210,7 +232,8 @@ def RenderAddDatePage(month, day, year, time, message):
 	values = { "message":message}
 	path = os.path.join(os.path.dirname(__file__), 'templates/add_gamedate.html')
 	return template.render(path, values)
-	
+
+# called when a comment is posted/added	
 class AddCommentHandler(webapp2.RequestHandler):
 	def get(self):
 		values = {}
@@ -269,7 +292,6 @@ send emails to players who are 'regulars' that have not committed or specified o
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-	('/schedule', ScheduleHandler),
 	('/player/(.*)', PlayerHandler),
 	('/players', PlayersHandler),
 	('/subs', SubsHandler),
